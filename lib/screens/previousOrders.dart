@@ -466,7 +466,7 @@ class _MessageBubbleState1 extends State<MessageBubble1> {
                   width: MediaQuery.of(context).size.width * 0.2,
                 ),
                 Text(
-                  '₹ ' + widget.price.toString(),
+                  '₹ ' + (widget.price * widget.quantity).toString(),
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 20,

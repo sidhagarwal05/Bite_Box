@@ -796,6 +796,40 @@ class _MessageBubbleState extends State<MessageBubble> {
                         }
                         if (widget.count > 4) {
                           widget.count = 4;
+                          showDialog(
+                              context: context,
+                              child: AlertDialog(
+                                backgroundColor: Colors.white,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20)),
+                                title: Text(
+                                  "TRY AGAIN",
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                content: Text(
+                                  "You cannot select more than four items",
+                                ),
+                                actions: <Widget>[
+                                  Align(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(10.0),
+                                      child: RaisedButton(
+                                        color: Colors.teal,
+                                        child: Text(
+                                          "Ok",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.white),
+                                        ),
+                                        elevation: 2,
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ));
                         }
                         if (hostel == null && selected == true) {
                           widget.count = 0;
