@@ -195,7 +195,18 @@ class _MessageBubbleState extends State<MessageBubble> {
                 children: <Widget>[
                   Container(
                     child: widget.image == null
-                        ? null
+                        ? Container(
+                            child: Padding(
+                              padding: EdgeInsets.all(
+                                  MediaQuery.of(context).size.width * 0.005),
+                              child: Container(
+                                color: Colors.teal,
+                                child: Image(
+                                  image: AssetImage('images/newlogo.png'),
+                                ),
+                              ),
+                            ),
+                          )
                         : Padding(
                             padding: EdgeInsets.all(
                                 MediaQuery.of(context).size.width * 0.005),
@@ -218,18 +229,26 @@ class _MessageBubbleState extends State<MessageBubble> {
                           style: TextStyle(
                               fontSize: 20, fontWeight: FontWeight.bold),
                         ),
-                        Text(
-                          "Free Delivery on orders above ₹" +
-                              widget.minimum.toString(),
-                          style: TextStyle(color: Colors.teal),
-                        ),
-                        widget.discount > 0
-                            ? Text(
-                                widget.discount.toString() + "% " + "Discount",
-                                style: TextStyle(
-                                  color: Colors.deepOrange,
-                                ),
-                              )
+                        widget.minimum != null
+                            ? widget.minimum > 0
+                                ? Text(
+                                    "Free Delivery on orders above ₹" +
+                                        widget.minimum.toString(),
+                                    style: TextStyle(color: Colors.teal),
+                                  )
+                                : Container()
+                            : Container(),
+                        widget.discount != null
+                            ? widget.discount > 0
+                                ? Text(
+                                    widget.discount.toString() +
+                                        "% " +
+                                        "Discount",
+                                    style: TextStyle(
+                                      color: Colors.deepOrange,
+                                    ),
+                                  )
+                                : Container()
                             : Container(),
                       ],
                     ),

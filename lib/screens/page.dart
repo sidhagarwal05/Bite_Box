@@ -58,7 +58,7 @@ class _PageState extends State<Page1> {
       child: Scaffold(
         bottomNavigationBar: CurvedNavigationBar(
           color: Colors.teal,
-          backgroundColor: Colors.transparent,
+          backgroundColor: Colors.white,
           buttonBackgroundColor: Colors.teal,
           height: 60,
           items: <Widget>[
