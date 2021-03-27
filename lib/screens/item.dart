@@ -13,8 +13,9 @@ bool loader = true;
 var document;
 bool cartblock;
 Map<String, int> cart = Map();
-int finalprice;
+int finalprice = 0;
 int total = 0;
+int total1 = 0;
 var hostel;
 List<MessageBubble1> messageBubbles1 = [];
 bool selected = true;
@@ -71,6 +72,12 @@ class _ItemState extends State<Item> with SingleTickerProviderStateMixin {
   }
 
   @override
+  void initState() {
+    super.initState();
+    finalprice = 0;
+  }
+
+  @override
   Widget build(BuildContext context) {
     setState(() {
       document = ModalRoute.of(context).settings.arguments;
@@ -100,6 +107,43 @@ class _ItemState extends State<Item> with SingleTickerProviderStateMixin {
           ),
         ),
         onTap: () {
+          // "Outlet/$document/Menu"
+
+          finalprice = 0;
+          _firestore
+              .collection("Outlet/$document/Menu")
+              .getDocuments()
+              .then((snapshot) {
+            snapshot.documents.forEach((message) {
+              cart.forEach((key, value) {
+                if (key == message.documentID && value > 0) {
+                  final price = message.data['Price'];
+                  total1 = value * price;
+                  finalprice = finalprice + total1;
+                }
+              });
+            });
+          });
+          // _firestore
+          //     .collection('Outlet')
+          //     .document('$document')
+          //     .get()
+          //     .then((userDocument) {
+          //   if (finalprice == 0 || finalprice == null) {
+          //     total = finalprice;
+          //   } else {
+          //     if (finalprice < 100 && selected == true) {
+          //       total = finalprice -
+          //           ((finalprice * userDocument['Discount']) / 100).round() +
+          //           ((finalprice * userDocument['Tax']) / 100).round() +
+          //           userDocument['Delivery Charge'];
+          //     } else {
+          //       total = finalprice -
+          //           ((finalprice * userDocument['Discount']) / 100).round() +
+          //           ((finalprice * userDocument['Tax']) / 100).round();
+          //     }
+          //   }
+          // });
           messageBubbles1.removeRange(0, messageBubbles1.length);
           if (hostel == null && selected != false) {
             showDialog(
@@ -342,7 +386,15 @@ class _ItemState extends State<Item> with SingleTickerProviderStateMixin {
                                 padding: const EdgeInsets.all(8.0),
                                 child: GestureDetector(
                                   onTap: () async {
-                                    if (finalprice == 0 || finalprice == null) {
+                                    bool empty = false;
+
+                                    cart.forEach((key, value) {
+                                      if (value > 0) {
+                                        empty = true;
+                                      }
+                                    });
+                                    // if (finalprice == 0 || finalprice == null) {
+                                    if (empty == false) {
                                       showDialog(
                                           context: context,
                                           child: AlertDialog(
@@ -757,8 +809,10 @@ class _MessageBubbleState extends State<MessageBubble> {
                                 ],
                               ));
                         } else {
-                          cart.update(widget.foodid, (value) => widget.count);
-                          print(cart[widget.foodid].toString() + '\n');
+                          setState(() {
+                            cart.update(widget.foodid, (value) => widget.count);
+                            print(cart[widget.foodid].toString() + '\n');
+                          });
                         }
                       });
                     },
@@ -868,8 +922,10 @@ class _MessageBubbleState extends State<MessageBubble> {
                                 ],
                               ));
                         } else {
-                          cart.update(widget.foodid, (value) => widget.count);
-                          print(cart[widget.foodid].toString() + '\n');
+                          setState(() {
+                            cart.update(widget.foodid, (value) => widget.count);
+                            print(cart[widget.foodid].toString() + '\n');
+                          });
                         }
                       });
                     },
@@ -892,7 +948,12 @@ class _MessageBubbleState extends State<MessageBubble> {
   }
 }
 
-class MessagesStream1 extends StatelessWidget {
+class MessagesStream1 extends StatefulWidget {
+  @override
+  _MessagesStream1State createState() => _MessagesStream1State();
+}
+
+class _MessagesStream1State extends State<MessagesStream1> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
@@ -917,15 +978,17 @@ class MessagesStream1 extends StatelessWidget {
               final price = message.data['Price'];
               final imageurl = message.data['imageurl'];
               final foodid = message.documentID;
-              final total = value * price;
-              finalprice = finalprice + total;
+              total1 = value * price;
+              // finalprice = finalprice + total;
+
               final messageBubble1 = MessageBubble1(
                 name: name,
                 price: price,
                 image: imageurl,
                 foodid: foodid,
                 count: value,
-                total: total,
+                finalprice: finalprice,
+                total1: total1,
               );
               messageBubbles1.add(messageBubble1);
             }
@@ -944,13 +1007,20 @@ class MessagesStream1 extends StatelessWidget {
 
 class MessageBubble1 extends StatefulWidget {
   MessageBubble1(
-      {this.name, this.image, this.price, this.foodid, this.count, this.total});
+      {this.name,
+      this.image,
+      this.price,
+      this.foodid,
+      this.count,
+      this.total1,
+      this.finalprice});
 
   final String name;
   final price;
-  final total;
+  final total1;
   final String image;
   final String foodid;
+  final finalprice;
   int count;
   @override
   _MessageBubbleState1 createState() => _MessageBubbleState1();
@@ -1024,7 +1094,7 @@ class _MessageBubbleState1 extends State<MessageBubble1> {
                   width: MediaQuery.of(context).size.width * 0.2,
                 ),
                 Text(
-                  '₹ ' + widget.total.toString(),
+                  '₹ ' + widget.total1.toString(),
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 20,

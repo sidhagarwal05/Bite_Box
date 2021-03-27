@@ -52,7 +52,7 @@ class _LoaderState extends State<Screen> {
 Future<bool> sendData() async {
   try {
     String order = "";
-    for (int i = 1; i < messageBubbles1.length; i++) {
+    for (int i = 0; i < messageBubbles1.length; i++) {
       order = order +
           messageBubbles1[i].name +
           " x " +
@@ -77,7 +77,7 @@ Future<bool> sendData() async {
     });
     final doc = ref.documentID;
     id = doc;
-    for (int i = 1; i < messageBubbles1.length; i++) {
+    for (int i = 0; i < messageBubbles1.length; i++) {
       await _firestore.collection("Order/$doc/Item").add({
         'Name': messageBubbles1[i].name,
         'Quantity': messageBubbles1[i].count,

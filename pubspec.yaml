@@ -46,6 +46,7 @@ dev_dependencies:
   lite_rolling_switch: ^0.1.1
   flutter_overlay_loader: ^0.0.2
   curved_navigation_bar: ^0.3.3
+  url_launcher: ^5.7.10
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

@@ -97,7 +97,9 @@ class Auth {
         .document(uid)
         .get()
         .then((doc) {
-      if (doc["block"] == null || doc["block"] == false) {
+      if (doc == null) {
+        return false;
+      } else if (doc["block"] == null || doc["block"] == false) {
         return true;
       } else {
         return false;

@@ -72,15 +72,16 @@ class HomeScreen extends StatelessWidget {
                     if (result) {
                       final check = await Auth().checkuserInfo();
                       print('check $check');
-                      final check2 = await Auth().checkblock();
+                      // final check2 = await Auth().checkblock();
                       print('check $check');
-                      if (check2 == false) {
-                        final signoutResult = await Auth().signOut();
-                        if (signoutResult) {
-                          Navigator.of(context)
-                              .pushReplacementNamed(HomeScreen.routeName);
-                        }
-                      } else if (check) {
+                      // if (check2 == false) {
+                      //   final signoutResult = await Auth().signOut();
+                      //   if (signoutResult) {
+                      //     Navigator.of(context)
+                      //         .pushReplacementNamed(HomeScreen.routeName);
+                      //   }
+                      // } else
+                      if (check) {
                         Navigator.of(context)
                             .pushReplacementNamed(Page1.routeName);
                       } else {

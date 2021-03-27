@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 final _firestore = Firestore.instance;
 FirebaseUser loggedInUser;
@@ -164,6 +165,7 @@ class _MessageBubbleState extends State<MessageBubble> {
         setState(() {
           reference = widget.reference;
         });
+
         showModalBottomSheet(
             context: context,
             builder: (context) {
@@ -185,16 +187,38 @@ class _MessageBubbleState extends State<MessageBubble> {
                                   Text(
                                     userDocument["name"],
                                     style: TextStyle(
-                                        fontSize: 40,
+                                        fontSize: 30,
                                         color: Colors.teal,
                                         fontWeight: FontWeight.bold),
                                   ),
-                                  Text(
-                                    userDocument["phone"],
-                                    style: TextStyle(
-                                        fontSize: 20,
-                                        color: Colors.teal,
-                                        fontWeight: FontWeight.bold),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      GestureDetector(
+                                        onTap: () => launch("tel:" +
+                                            userDocument["phone"].toString()),
+                                        child: Text(
+                                          userDocument["phone"],
+                                          style: TextStyle(
+                                              fontSize: 20,
+                                              color: Colors.teal,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                      GestureDetector(
+                                        onTap: () => launch("tel:" +
+                                            userDocument["phone"].toString()),
+                                        child: CircleAvatar(
+                                          backgroundColor: Colors.transparent,
+                                          child: Icon(
+                                            Icons.phone,
+                                            size: 20,
+                                            color: Colors.teal,
+                                          ),
+                                          radius: 20,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ],
                               ),
@@ -466,7 +490,7 @@ class _MessageBubbleState1 extends State<MessageBubble1> {
                   width: MediaQuery.of(context).size.width * 0.2,
                 ),
                 Text(
-                  '₹ ' + (widget.price * widget.quantity).toString(),
+                  '₹ ' + widget.price.toString(),
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 20,

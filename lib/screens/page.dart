@@ -1,10 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:innovtion/providers/auth.dart';
 import 'package:innovtion/screens/base.dart';
 import 'package:innovtion/screens/previousOrders.dart';
 import 'package:innovtion/screens/user_info.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+
+import 'home.dart';
 
 PageController pageController;
 int page = 0;
@@ -16,6 +19,17 @@ class Page1 extends StatefulWidget {
 }
 
 class _PageState extends State<Page1> {
+  void movetoHome1() async {
+    final check2 = await Auth().checkblock();
+
+    if (check2 == false) {
+      final signoutResult = await Auth().signOut();
+      if (signoutResult) {
+        Navigator.of(context).pushReplacementNamed(HomeScreen.routeName);
+      }
+    }
+  }
+
   Future<bool> _onWillPop() async {
     return (await showDialog(
           context: context,
@@ -48,6 +62,7 @@ class _PageState extends State<Page1> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    movetoHome1();
     pageController = PageController();
   }
 
